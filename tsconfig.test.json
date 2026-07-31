@@ -1,0 +1,10 @@
+// Type-checks the tests alongside src without emitting. The build (tsconfig.json)
+// deliberately excludes test/ so nothing test-related ends up in dist/.
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "rootDir": "."
+  },
+  "include": ["src", "test"]
+}

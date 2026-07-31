@@ -1,0 +1,85 @@
+name: Architecture
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  architecture:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          # 22+: `node --test` only accepts glob patterns from v22.6, and Node 20 is EOL.
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+      - run: npm run build
+      - run: npm test
+
+      # Build locally instead of `npx repo-cartographer` so this dogfoods the repo
+      # itself before the package is published. External consumers use action.yml.
+      - name: Enforce architecture rules
+        run: node dist/index.js check . --config .cartographer.yml
+
+      # --format mermaid pinned: the PR comment below embeds a ```mermaid fence.
+      - name: Regenerate architecture diagram
+        if: always()
+        run: node dist/index.js map . -o docs/architecture --level high --format mermaid
+
+      - name: Comment on the PR
+        if: ${{ always() && github.event_name == 'pull_request' }}
+        uses: actions/github-script@v7
+        env:
+          DIAGRAM_OUT: docs/architecture
+        with:
+          script: |
+            const fs = require('fs');
+            const marker = '<!-- repo-cartographer -->';
+            const outBase = process.env.DIAGRAM_OUT || 'docs/architecture';
+            const mermaidPath = `${outBase}.mermaid`;
+            const mermaid = fs.existsSync(mermaidPath) ? fs.readFileSync(mermaidPath, 'utf8').trim() : '';
+            const violations = fs.existsSync('violations.json')
+              ? JSON.parse(fs.readFileSync('violations.json', 'utf8')) : [];
+            const errs = violations.filter(v => v.level === 'error').length;
+            const warns = violations.length - errs;
+            const head = violations.length
+              ? `**${errs} error(s), ${warns} warning(s)**`
+              : '✅ No architecture rule violations.';
+            const list = violations.map(v => {
+              const icon = v.level === 'error' ? '❌' : '⚠️';
+              return v.kind === 'forbidden'
+                ? `${icon} \`${v.from}\` → \`${v.to}\` — ${v.reason}`
+                : `${icon} ${v.reason}`;
+            }).join('\n');
+            const body = [
+              marker,
+              '### 🗺️ Architecture check',
+              '',
+              head,
+              list ? '\n' + list : '',
+              '',
+              '<details><summary>Architecture diagram</summary>',
+              '',
+              '```mermaid',
+              mermaid,
+              '```',
+              '',
+              '</details>',
+            ].join('\n');
+
+            const { owner, repo } = context.repo;
+            const issue_number = context.issue.number;
+            const { data: comments } = await github.rest.issues.listComments({ owner, repo, issue_number });
+            const existing = comments.find(c => c.body && c.body.includes(marker));
+            if (existing) {
+              await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
+            } else {
+              await github.rest.issues.createComment({ owner, repo, issue_number, body });
+            }

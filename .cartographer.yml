@@ -1,0 +1,17 @@
+# Architecture rules for repo-cartographer itself (dogfooding the check).
+rules:
+  forbidden:
+    - from: "src/lib/**"
+      to:   "src/tools/**"
+      reason: "library code must not depend on tool implementations (dependencies point inward)"
+    - from: "src/lib/**"
+      to:   "src/server.ts"
+      reason: "library code must not depend on the server entry point"
+
+  # Report cycles without failing the build. (The top-level src/lib/tools grouping
+  # produces one benign cycle because shared types live in src/types.ts.)
+  cycles: warn
+
+diagram:
+  level: high
+  outPath: docs/architecture

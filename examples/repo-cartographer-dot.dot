@@ -1,0 +1,20 @@
+digraph "repo-cartographer" {
+    // repo-cartographer — high-level architecture (DRAFT, refine me)
+    rankdir=TB;
+    node [shape=box, style="rounded,filled", fontname="Helvetica,Arial,sans-serif", fillcolor="#eef1f4", color="#8b949e", fontcolor="#1f2328"];
+    edge [color="#57606a"];
+    "src" [label="src\n4 files"];
+    "src/lib" [label="src/lib\nlibrary code\n14 files", fillcolor="#79706e", fontcolor="#ffffff", color="#5d5654"];
+    "src/resources" [label="src/resources\nresource handlers\n1 file", fillcolor="#79706e", fontcolor="#ffffff", color="#5d5654"];
+    "src/tools" [label="src/tools\ntool implementations\n6 files", fillcolor="#79706e", fontcolor="#ffffff", color="#5d5654"];
+    "test" [label="test\ntests\n14 files", fillcolor="#499894", fontcolor="#ffffff", color="#397975"];
+    "src" -> "src/lib";
+    "src" -> "src/resources";
+    "src" -> "src/tools";
+    "src/lib" -> "src";
+    "src/tools" -> "src";
+    "src/tools" -> "src/lib";
+    "test" -> "src";
+    "test" -> "src/lib";
+    "test" -> "src/tools";
+}

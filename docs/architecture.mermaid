@@ -1,0 +1,20 @@
+flowchart TD
+    %% repo-cartographer — high-level architecture (DRAFT, refine me)
+    n0["src · 4 files"]
+    n1["src/lib · library code · 14 files"]
+    n2["src/resources · resource handlers · 1 file"]
+    n3["src/tools · tool implementations · 6 files"]
+    n4["test · tests · 14 files"]
+    n0 --> n1
+    n0 --> n2
+    n0 --> n3
+    n1 --> n0
+    n3 --> n0
+    n3 --> n1
+    n4 --> n0
+    n4 --> n1
+    n4 --> n3
+    class n1,n2,n3 shared
+    class n4 test
+    classDef shared fill:#79706e,color:#ffffff,stroke:#5d5654
+    classDef test fill:#499894,color:#ffffff,stroke:#397975

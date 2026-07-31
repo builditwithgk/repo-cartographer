@@ -1,0 +1,55 @@
+{
+  "name": "repo-cartographer",
+  "version": "1.0.0",
+  "description": "Understand any codebase in 60 seconds — an MCP server that turns any repo into an architecture diagram.",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "repo-cartographer": "dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/index.ts",
+    "start": "node dist/index.js",
+    "test": "node --import tsx --test \"test/**/*.test.ts\"",
+    "typecheck": "tsc -p tsconfig.test.json"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "architecture",
+    "diagram",
+    "mermaid",
+    "codebase"
+  ],
+  "author": {
+    "name": "Gopi K Aitham (builditwithgk)",
+    "email": "builditwithgk@gmail.com",
+    "url": "https://github.com/builditwithgk"
+  },
+  "homepage": "https://github.com/builditwithgk/repo-cartographer#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/builditwithgk/repo-cartographer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/builditwithgk/repo-cartographer/issues"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "yaml": "^2.9.0",
+    "zod": "^4.4.3"
+  },
+  "overrides": {
+    "@hono/node-server": "^2.0.5"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.1",
+    "tsx": "^4.23.1",
+    "typescript": "^7.0.2"
+  }
+}

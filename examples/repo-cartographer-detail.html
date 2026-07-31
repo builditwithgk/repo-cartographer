@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>repo-cartographer-detail — architecture</title>
+<style>
+  :root { color-scheme: light dark; --bg:#ffffff; --fg:#1a1a1a; --muted:#666; --card:#f6f8fa; --border:#e2e5e9; --accent:#3b6fd4; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#0f1115; --fg:#e6e6e6; --muted:#9aa0a6; --card:#171a21; --border:#2a2f3a; --accent:#6f9dff; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background:var(--bg); color:var(--fg); }
+  header { padding:20px 24px; border-bottom:1px solid var(--border); display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; }
+  header h1 { font-size:18px; margin:0; font-weight:650; }
+  header .tag { font-size:12px; color:var(--muted); }
+  main { padding:24px; }
+  .diagram { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; overflow-x:auto; }
+  .diagram .mermaid, .diagram #graph { display:flex; justify-content:center; }
+  .diagram #graph svg { max-width:100%; height:auto; }
+  .bar { display:flex; gap:8px; margin:16px 0 0; }
+  button { font:inherit; font-size:13px; padding:7px 13px; border-radius:8px; border:1px solid var(--border); background:var(--card); color:var(--fg); cursor:pointer; }
+  button:hover { border-color:var(--accent); }
+  details { margin-top:16px; }
+  summary { cursor:pointer; color:var(--muted); font-size:13px; }
+  pre.src { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:14px; overflow:auto; font-size:12.5px; line-height:1.5; }
+  footer { padding:16px 24px; color:var(--muted); font-size:12px; border-top:1px solid var(--border); }
+  a { color:var(--accent); }
+</style>
+</head>
+<body>
+<header>
+  <h1>repo-cartographer-detail</h1>
+  <span class="tag">architecture diagram · draft · mermaid</span>
+</header>
+<main>
+  <div class="diagram">
+    <pre class="mermaid">flowchart TD
+    %% repo-cartographer — detail-level architecture (DRAFT, refine me)
+    subgraph g0["src"]
+        n0["cli.ts"]
+        n1["index.ts"]
+        n17["server.ts"]
+        n24["types.ts"]
+    end
+    subgraph g1["src/lib"]
+        n2["baseline.ts"]
+        n3["cycles.ts"]
+        n4["detect.ts"]
+        n5["dot.ts"]
+        n6["fsutil.ts"]
+        n7["glob.ts"]
+        n8["ignore.ts"]
+        n9["imports.ts"]
+        n10["mermaid.ts"]
+        n11["paths.ts"]
+        n12["result.ts"]
+        n13["roles.ts"]
+        n14["rules.ts"]
+        n15["walk.ts"]
+    end
+    subgraph g2["src/resources"]
+        n16["author.ts"]
+    end
+    subgraph g3["src/tools"]
+        n18["buildImportGraph.ts"]
+        n19["checkRepo.ts"]
+        n20["generateDiagram.ts"]
+        n21["mapRepo.ts"]
+        n22["renderDiagram.ts"]
+        n23["scanRepo.ts"]
+    end
+    subgraph g4["test"]
+        n25["baseline.test.ts"]
+        n26["check.test.ts"]
+        n27["cycles.test.ts"]
+        n28["detect.test.ts"]
+        n29["dot.test.ts"]
+        n30["glob.test.ts"]
+        n31["fixture.ts"]
+        n32["imports.test.ts"]
+        n33["mermaid.test.ts"]
+        n34["paths.test.ts"]
+        n35["renderDiagram.test.ts"]
+        n36["roles.test.ts"]
+        n37["rules.test.ts"]
+        n38["walk.test.ts"]
+    end
+    n0 --&gt; n2
+    n0 --&gt; n14
+    n0 --&gt; n19
+    n0 --&gt; n21
+    n0 --&gt; n24
+    n1 --&gt; n0
+    n1 --&gt; n17
+    n2 --&gt; n24
+    n3 --&gt; n24
+    n4 --&gt; n6
+    n4 --&gt; n8
+    n4 --&gt; n11
+    n4 --&gt; n24
+    n5 --&gt; n9
+    n5 --&gt; n11
+    n5 --&gt; n13
+    n5 --&gt; n24
+    n9 --&gt; n6
+    n9 --&gt; n8
+    n9 --&gt; n11
+    n9 --&gt; n24
+    n10 --&gt; n9
+    n10 --&gt; n11
+    n10 --&gt; n13
+    n10 --&gt; n24
+    n14 --&gt; n24
+    n15 --&gt; n6
+    n15 --&gt; n8
+    n15 --&gt; n11
+    n17 --&gt; n12
+    n17 --&gt; n16
+    n17 --&gt; n18
+    n17 --&gt; n20
+    n17 --&gt; n21
+    n17 --&gt; n22
+    n17 --&gt; n23
+    n18 --&gt; n8
+    n18 --&gt; n9
+    n18 --&gt; n11
+    n18 --&gt; n15
+    n18 --&gt; n24
+    n19 --&gt; n3
+    n19 --&gt; n7
+    n19 --&gt; n9
+    n19 --&gt; n11
+    n19 --&gt; n14
+    n19 --&gt; n15
+    n19 --&gt; n24
+    n20 --&gt; n4
+    n20 --&gt; n5
+    n20 --&gt; n9
+    n20 --&gt; n10
+    n20 --&gt; n11
+    n20 --&gt; n15
+    n20 --&gt; n24
+    n21 --&gt; n15
+    n21 --&gt; n20
+    n21 --&gt; n22
+    n21 --&gt; n23
+    n22 --&gt; n24
+    n23 --&gt; n4
+    n23 --&gt; n11
+    n23 --&gt; n13
+    n23 --&gt; n15
+    n23 --&gt; n24
+    n25 --&gt; n2
+    n25 --&gt; n24
+    n25 --&gt; n31
+    n26 --&gt; n14
+    n26 --&gt; n19
+    n26 --&gt; n31
+    n27 --&gt; n3
+    n27 --&gt; n24
+    n28 --&gt; n4
+    n28 --&gt; n31
+    n29 --&gt; n5
+    n29 --&gt; n20
+    n29 --&gt; n24
+    n29 --&gt; n31
+    n30 --&gt; n7
+    n31 --&gt; n11
+    n32 --&gt; n9
+    n32 --&gt; n24
+    n32 --&gt; n31
+    n33 --&gt; n10
+    n33 --&gt; n24
+    n34 --&gt; n11
+    n35 --&gt; n22
+    n35 --&gt; n31
+    n36 --&gt; n13
+    n37 --&gt; n14
+    n37 --&gt; n31
+    n38 --&gt; n15
+    n38 --&gt; n31</pre>
+  </div>
+  <div class="bar">
+    <button id="copy">Copy Mermaid source</button>
+    <button id="download">Download .mermaid</button>
+  </div>
+  <details>
+    <summary>View Mermaid source</summary>
+    <pre class="src">flowchart TD
+    %% repo-cartographer — detail-level architecture (DRAFT, refine me)
+    subgraph g0["src"]
+        n0["cli.ts"]
+        n1["index.ts"]
+        n17["server.ts"]
+        n24["types.ts"]
+    end
+    subgraph g1["src/lib"]
+        n2["baseline.ts"]
+        n3["cycles.ts"]
+        n4["detect.ts"]
+        n5["dot.ts"]
+        n6["fsutil.ts"]
+        n7["glob.ts"]
+        n8["ignore.ts"]
+        n9["imports.ts"]
+        n10["mermaid.ts"]
+        n11["paths.ts"]
+        n12["result.ts"]
+        n13["roles.ts"]
+        n14["rules.ts"]
+        n15["walk.ts"]
+    end
+    subgraph g2["src/resources"]
+        n16["author.ts"]
+    end
+    subgraph g3["src/tools"]
+        n18["buildImportGraph.ts"]
+        n19["checkRepo.ts"]
+        n20["generateDiagram.ts"]
+        n21["mapRepo.ts"]
+        n22["renderDiagram.ts"]
+        n23["scanRepo.ts"]
+    end
+    subgraph g4["test"]
+        n25["baseline.test.ts"]
+        n26["check.test.ts"]
+        n27["cycles.test.ts"]
+        n28["detect.test.ts"]
+        n29["dot.test.ts"]
+        n30["glob.test.ts"]
+        n31["fixture.ts"]
+        n32["imports.test.ts"]
+        n33["mermaid.test.ts"]
+        n34["paths.test.ts"]
+        n35["renderDiagram.test.ts"]
+        n36["roles.test.ts"]
+        n37["rules.test.ts"]
+        n38["walk.test.ts"]
+    end
+    n0 --&gt; n2
+    n0 --&gt; n14
+    n0 --&gt; n19
+    n0 --&gt; n21
+    n0 --&gt; n24
+    n1 --&gt; n0
+    n1 --&gt; n17
+    n2 --&gt; n24
+    n3 --&gt; n24
+    n4 --&gt; n6
+    n4 --&gt; n8
+    n4 --&gt; n11
+    n4 --&gt; n24
+    n5 --&gt; n9
+    n5 --&gt; n11
+    n5 --&gt; n13
+    n5 --&gt; n24
+    n9 --&gt; n6
+    n9 --&gt; n8
+    n9 --&gt; n11
+    n9 --&gt; n24
+    n10 --&gt; n9
+    n10 --&gt; n11
+    n10 --&gt; n13
+    n10 --&gt; n24
+    n14 --&gt; n24
+    n15 --&gt; n6
+    n15 --&gt; n8
+    n15 --&gt; n11
+    n17 --&gt; n12
+    n17 --&gt; n16
+    n17 --&gt; n18
+    n17 --&gt; n20
+    n17 --&gt; n21
+    n17 --&gt; n22
+    n17 --&gt; n23
+    n18 --&gt; n8
+    n18 --&gt; n9
+    n18 --&gt; n11
+    n18 --&gt; n15
+    n18 --&gt; n24
+    n19 --&gt; n3
+    n19 --&gt; n7
+    n19 --&gt; n9
+    n19 --&gt; n11
+    n19 --&gt; n14
+    n19 --&gt; n15
+    n19 --&gt; n24
+    n20 --&gt; n4
+    n20 --&gt; n5
+    n20 --&gt; n9
+    n20 --&gt; n10
+    n20 --&gt; n11
+    n20 --&gt; n15
+    n20 --&gt; n24
+    n21 --&gt; n15
+    n21 --&gt; n20
+    n21 --&gt; n22
+    n21 --&gt; n23
+    n22 --&gt; n24
+    n23 --&gt; n4
+    n23 --&gt; n11
+    n23 --&gt; n13
+    n23 --&gt; n15
+    n23 --&gt; n24
+    n25 --&gt; n2
+    n25 --&gt; n24
+    n25 --&gt; n31
+    n26 --&gt; n14
+    n26 --&gt; n19
+    n26 --&gt; n31
+    n27 --&gt; n3
+    n27 --&gt; n24
+    n28 --&gt; n4
+    n28 --&gt; n31
+    n29 --&gt; n5
+    n29 --&gt; n20
+    n29 --&gt; n24
+    n29 --&gt; n31
+    n30 --&gt; n7
+    n31 --&gt; n11
+    n32 --&gt; n9
+    n32 --&gt; n24
+    n32 --&gt; n31
+    n33 --&gt; n10
+    n33 --&gt; n24
+    n34 --&gt; n11
+    n35 --&gt; n22
+    n35 --&gt; n31
+    n36 --&gt; n13
+    n37 --&gt; n14
+    n37 --&gt; n31
+    n38 --&gt; n15
+    n38 --&gt; n31</pre>
+  </details>
+</main>
+<footer>Generated by <a href="https://github.com/builditwithgk/repo-cartographer">repo-cartographer</a>. This is a draft — refine it with your model.</footer>
+<script>
+  const SRC = "flowchart TD\n    %% repo-cartographer — detail-level architecture (DRAFT, refine me)\n    subgraph g0[\"src\"]\n        n0[\"cli.ts\"]\n        n1[\"index.ts\"]\n        n17[\"server.ts\"]\n        n24[\"types.ts\"]\n    end\n    subgraph g1[\"src/lib\"]\n        n2[\"baseline.ts\"]\n        n3[\"cycles.ts\"]\n        n4[\"detect.ts\"]\n        n5[\"dot.ts\"]\n        n6[\"fsutil.ts\"]\n        n7[\"glob.ts\"]\n        n8[\"ignore.ts\"]\n        n9[\"imports.ts\"]\n        n10[\"mermaid.ts\"]\n        n11[\"paths.ts\"]\n        n12[\"result.ts\"]\n        n13[\"roles.ts\"]\n        n14[\"rules.ts\"]\n        n15[\"walk.ts\"]\n    end\n    subgraph g2[\"src/resources\"]\n        n16[\"author.ts\"]\n    end\n    subgraph g3[\"src/tools\"]\n        n18[\"buildImportGraph.ts\"]\n        n19[\"checkRepo.ts\"]\n        n20[\"generateDiagram.ts\"]\n        n21[\"mapRepo.ts\"]\n        n22[\"renderDiagram.ts\"]\n        n23[\"scanRepo.ts\"]\n    end\n    subgraph g4[\"test\"]\n        n25[\"baseline.test.ts\"]\n        n26[\"check.test.ts\"]\n        n27[\"cycles.test.ts\"]\n        n28[\"detect.test.ts\"]\n        n29[\"dot.test.ts\"]\n        n30[\"glob.test.ts\"]\n        n31[\"fixture.ts\"]\n        n32[\"imports.test.ts\"]\n        n33[\"mermaid.test.ts\"]\n        n34[\"paths.test.ts\"]\n        n35[\"renderDiagram.test.ts\"]\n        n36[\"roles.test.ts\"]\n        n37[\"rules.test.ts\"]\n        n38[\"walk.test.ts\"]\n    end\n    n0 --> n2\n    n0 --> n14\n    n0 --> n19\n    n0 --> n21\n    n0 --> n24\n    n1 --> n0\n    n1 --> n17\n    n2 --> n24\n    n3 --> n24\n    n4 --> n6\n    n4 --> n8\n    n4 --> n11\n    n4 --> n24\n    n5 --> n9\n    n5 --> n11\n    n5 --> n13\n    n5 --> n24\n    n9 --> n6\n    n9 --> n8\n    n9 --> n11\n    n9 --> n24\n    n10 --> n9\n    n10 --> n11\n    n10 --> n13\n    n10 --> n24\n    n14 --> n24\n    n15 --> n6\n    n15 --> n8\n    n15 --> n11\n    n17 --> n12\n    n17 --> n16\n    n17 --> n18\n    n17 --> n20\n    n17 --> n21\n    n17 --> n22\n    n17 --> n23\n    n18 --> n8\n    n18 --> n9\n    n18 --> n11\n    n18 --> n15\n    n18 --> n24\n    n19 --> n3\n    n19 --> n7\n    n19 --> n9\n    n19 --> n11\n    n19 --> n14\n    n19 --> n15\n    n19 --> n24\n    n20 --> n4\n    n20 --> n5\n    n20 --> n9\n    n20 --> n10\n    n20 --> n11\n    n20 --> n15\n    n20 --> n24\n    n21 --> n15\n    n21 --> n20\n    n21 --> n22\n    n21 --> n23\n    n22 --> n24\n    n23 --> n4\n    n23 --> n11\n    n23 --> n13\n    n23 --> n15\n    n23 --> n24\n    n25 --> n2\n    n25 --> n24\n    n25 --> n31\n    n26 --> n14\n    n26 --> n19\n    n26 --> n31\n    n27 --> n3\n    n27 --> n24\n    n28 --> n4\n    n28 --> n31\n    n29 --> n5\n    n29 --> n20\n    n29 --> n24\n    n29 --> n31\n    n30 --> n7\n    n31 --> n11\n    n32 --> n9\n    n32 --> n24\n    n32 --> n31\n    n33 --> n10\n    n33 --> n24\n    n34 --> n11\n    n35 --> n22\n    n35 --> n31\n    n36 --> n13\n    n37 --> n14\n    n37 --> n31\n    n38 --> n15\n    n38 --> n31";
+  document.getElementById("copy").addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText(SRC); } catch (e) {}
+  });
+  document.getElementById("download").addEventListener("click", () => {
+    const blob = new Blob([SRC], { type: "text/plain" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "repo-cartographer-detail" + ".mermaid";
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+</script>
+<script type="module">
+  import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+  const dark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  mermaid.initialize({ startOnLoad: true, theme: dark ? "dark" : "default", securityLevel: "strict" });
+</script>
+</body>
+</html>

@@ -2,6 +2,7 @@
   "name": "repo-cartographer",
   "version": "1.0.0",
   "description": "Understand any codebase in 60 seconds — an MCP server that turns any repo into an architecture diagram.",
+  "mcpName": "io.github.builditwithgk/repo-cartographer",
   "type": "module",
   "main": "dist/index.js",
   "bin": {
@@ -15,15 +16,26 @@
     "dev": "tsx src/index.ts",
     "start": "node dist/index.js",
     "test": "node --import tsx --test \"test/**/*.test.ts\"",
-    "typecheck": "tsc -p tsconfig.test.json"
+    "typecheck": "tsc -p tsconfig.test.json",
+    "prepublishOnly": "npm run build && npm test"
+  },
+  "engines": {
+    "node": ">=18"
   },
   "keywords": [
     "mcp",
+    "mcp-server",
     "model-context-protocol",
     "architecture",
+    "architecture-diagram",
     "diagram",
     "mermaid",
-    "codebase"
+    "graphviz",
+    "dot",
+    "codebase",
+    "dependency-graph",
+    "cli",
+    "github-action"
   ],
   "author": {
     "name": "Gopi K Aitham (builditwithgk)",

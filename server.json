@@ -1,0 +1,21 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.builditwithgk/repo-cartographer",
+  "description": "Maps any repo into an architecture diagram (Mermaid/Graphviz) and enforces architecture rules in CI",
+  "repository": {
+    "url": "https://github.com/builditwithgk/repo-cartographer",
+    "source": "github"
+  },
+  "websiteUrl": "https://huggingface.co/spaces/builditwithgk/repo-cartographer",
+  "version": "1.0.0",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "repo-cartographer",
+      "version": "1.0.0",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}

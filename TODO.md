@@ -1,15 +1,15 @@
 # TODO / Tech debt — repo-cartographer
 
 ## Deferred (intentionally, for now)
-- [ ] **Initial git commit.** Repo has zero commits. Hold off until manual testing passes. `.gitignore` already excludes `node_modules/` + `dist/`.
-- [ ] **Publish to npm** so `npx -y repo-cartographer` works. Until then, README's npx commands only work from source (`npm run build` + `node dist/index.js`).
+- [x] **Initial git commit** — published to https://github.com/builditwithgk/repo-cartographer (2026-07-31).
+- [x] **Publish to npm** — `repo-cartographer@1.0.0` live (2026-08-05); `npx -y repo-cartographer` verified cold. Floating `v1` tag pushed, so `uses: builditwithgk/repo-cartographer@v1` works for external repos.
 
 ## Roadmap — the "enterprising" direction
 - [x] **One-shot `map_repo(path)`** — path in, downloadable diagram out (shipped).
 - [x] **CLI (`map` + `check`)** — dual-mode binary; `check` enforces forbidden imports + cycles from a `.cartographer.yml`, writes `violations.json`, exits 1 on error. (shipped)
 - [x] **GitHub Action (Phase 2)** — composite [`action.yml`](action.yml) + dogfood workflow that runs `check` on every PR and posts diagram + violations as a sticky comment. (shipped)
 - [x] **"New violations only" (Phase 3)** — `check --update-baseline` writes `.cartographer-baseline.json`; later runs fail only on newly-introduced violations. (shipped)
-- [ ] **Publish to npm** — required before the `uses: builditwithgk/repo-cartographer@v1` action works for external consumers (it runs `npx repo-cartographer`).
+- [x] **Publish to npm** — done (2026-08-05); the `@v1` Action is now consumable by external repos.
 - [x] **Unit tests** — 169 tests under [`test/`](test/) via `node:test` + `tsx` (`npm test`), no new dependencies and no build step. Cover import resolution (JS/TS + Python), module collapsing, Tarjan cycles, rule globs, config loading, baseline diffing, walking, manifest/entry-point detection, Mermaid + DOT rendering and `runCheck` end-to-end. `npm run typecheck` type-checks `src/` + `test/` together via [`tsconfig.test.json`](tsconfig.test.json). (shipped)
 - [x] **Zip-wrapper auto-descent** — a directory containing no files and exactly one visible subfolder (GitHub "Download ZIP" shape) is stepped past (bounded, noted in tool output) by every tool via `resolveRepoRoot`. Guard: a lone source container (`src/`, `lib/`, `packages/`…) is never treated as a wrapper — that would rewrite every repo-relative glob. Found by testing the fresh-clone flow against extracted sample zips: pre-fix, a 219-file repo mapped as "1 module · 0 edges". Also added: `LICENSE` (MIT — README/package.json already claimed it). (shipped)
 - [x] **Diagram formats + role styling** — `format: mermaid | dot` on `map_repo`/`generate_diagram`/`render_diagram`, `--format` on the CLI, `diagram.format` in `.cartographer.yml`, and a `format` input on the Action (comment pins mermaid — the PR fence can't render DOT). High-level diagrams color modules by role family (shared palette across both emitters); DOT HTML renders via the Viz CDN. `map` now reads its defaults from the config's `diagram:` section (flags win) — that section used to be dead config. Strategy: Mermaid because that's where people read it, DOT because that's what their tools eat. (shipped)

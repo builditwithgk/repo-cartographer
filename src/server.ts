@@ -24,7 +24,7 @@ function message(e: unknown): string {
 
 /** Construct the server with all tools + resources registered. */
 export function buildServer(): McpServer {
-  const server = new McpServer({ name: "repo-cartographer", version: "1.0.0" });
+  const server = new McpServer({ name: "repo-cartographer", version: "1.0.1" });
 
   server.registerTool(
     "map_repo",
@@ -66,7 +66,10 @@ export function buildServer(): McpServer {
       description:
         "Deterministically extract facts from a local repo: programming languages, " +
         "frameworks/libraries, entry points, top-level modules (with role guesses), and a " +
-        "manifest summary. Returns JSON facts only — no interpretation.",
+        "manifest summary. Returns JSON facts only — no interpretation. Use this when you " +
+        "need repo facts WITHOUT a diagram (e.g. to answer questions about the stack). " +
+        "Prefer map_repo for the one-shot diagram flow; use build_import_graph when you " +
+        "need dependency edges rather than an inventory.",
       inputSchema: { path: z.string().describe("Absolute or relative path to the repository root") },
     },
     async ({ path }) => {
@@ -85,7 +88,10 @@ export function buildServer(): McpServer {
       description:
         "Extract intra-repo import/require relationships for JavaScript/TypeScript and Python. " +
         "Nodes are files (auto-collapsed to module/directory level for large repos); edges are " +
-        "directed import relationships. Returns JSON.",
+        "directed import relationships. Returns JSON. Use this when you need the raw dependency " +
+        "edges — who imports whom — e.g. to reason about coupling, cycles, layering, or the blast " +
+        "radius of a change. Do NOT use it just to draw a picture: generate_diagram returns a " +
+        "ready-to-render draft, and map_repo does the whole flow in one call.",
       inputSchema: { path: z.string().describe("Absolute or relative path to the repository root") },
     },
     async ({ path }) => {
@@ -104,7 +110,10 @@ export function buildServer(): McpServer {
       description:
         "Combine scan + import facts into a DRAFT diagram string — Mermaid flowchart (default) " +
         "or Graphviz DOT. level 'high' (default) shows modules/directories; 'detail' shows files " +
-        "grouped by module. This is a draft the calling model is expected to refine.",
+        "grouped by module. This is a draft the calling model is expected to refine. Use this " +
+        "when you want to edit or refine the diagram source before rendering (pair with " +
+        "render_diagram to write the HTML afterwards). If no in-between editing is needed, " +
+        "prefer map_repo — it generates AND renders in one call.",
       inputSchema: {
         path: z.string().describe("Absolute or relative path to the repository root"),
         level: z.enum(["high", "detail"]).optional().describe("Diagram granularity (default 'high')"),
@@ -129,7 +138,10 @@ export function buildServer(): McpServer {
       title: "Render diagram",
       description:
         "Write a self-contained, shareable HTML page (renders via CDN: Mermaid, or Viz for " +
-        "Graphviz DOT) plus the raw source file (.mermaid or .dot). Returns the absolute paths written.",
+        "Graphviz DOT) plus the raw source file (.mermaid or .dot). Returns the absolute paths " +
+        "written. Use this as the final step after refining a draft from generate_diagram — or " +
+        "to render ANY Mermaid/DOT source, hand-written included. If you have not edited the " +
+        "draft, prefer map_repo, which renders it for you.",
       inputSchema: {
         source: z.string().describe("Diagram source to render (Mermaid, or DOT when format is 'dot')"),
         format: z

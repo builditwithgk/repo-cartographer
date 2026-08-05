@@ -1,6 +1,6 @@
 {
   "name": "repo-cartographer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Understand any codebase in 60 seconds — an MCP server that turns any repo into an architecture diagram.",
   "mcpName": "io.github.builditwithgk/repo-cartographer",
   "type": "module",
